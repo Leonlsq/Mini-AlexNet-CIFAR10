@@ -23,17 +23,36 @@ class MiniAlexNet(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2),
 
             # Conv3
-            nn.Conv2d(384, 192, 3, 1),
+            nn.Conv2d(192, 384, 3, 1, 1),
             nn.ReLU(True),
 
             # Con4
-            nn.Conv2d(384, 256, 3, 1),
+            nn.Conv2d(384, 256, 3, 1, 1),
             nn.ReLU(True),
 
             # Conv5
-            nn.Conv2d(256, 256, 3, 1),
+            nn.Conv2d(256, 256, 3, 1, 1),
             nn.ReLU(True),
 
             # 8*8 -> 4*4
             nn.MaxPool2d(kernel_size=2, stride=2),
         )
+
+        self.classifier = nn.Sequential(
+            nn.Dropout(p=0.5),
+            nn.Linear(in_features=256 * 4 * 4, out_features=1024),
+            nn.ReLU(True),
+
+            nn.Dropout(p=0.5),
+            nn.Linear(in_features=256 * 4 * 4, out_features=1024),
+            nn.ReLU(True),
+
+            nn.Linear(in_features=1024, out_features=num_classes),
+
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        x = torch.flatten(x, 1)
+        x = self.classifier(x)
+        return x
