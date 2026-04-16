@@ -23,7 +23,7 @@ class MiniAlexNet(nn.Module):
             nn.MaxPool2d(kernel_size=2, stride=2),
 
             # Conv3
-            nn.Conv2d(192, 384, 3, 1),
+            nn.Conv2d(384, 192, 3, 1),
             nn.ReLU(True),
 
             # Con4
