@@ -44,7 +44,7 @@ class MiniAlexNet(nn.Module):
             nn.ReLU(True),
 
             nn.Dropout(p=0.5),
-            nn.Linear(in_features=256 * 4 * 4, out_features=1024),
+            nn.Linear(in_features=256 * 4, out_features=1024),
             nn.ReLU(True),
 
             nn.Linear(in_features=1024, out_features=num_classes),
