@@ -28,6 +28,9 @@ def main():
         model.train()
         tot_loss = 0
 
+        train_correct = 0
+        train_total = 0
+
         for i, (images, labels) in enumerate(train_loader):
 
             images = images.to(device)
@@ -48,13 +51,19 @@ def main():
             # accumulate total loss
             tot_loss += cur_loss.item()
 
+            _, predicted = torch.max(outputs.data, 1)
+            train_total += labels.size(0)
+            train_correct += (predicted == labels).sum().item()
+
             # print the average loss every 100 batches
             if (i+1) % 100 == 0:
                 print(
                     f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{len(train_loader)}], Loss: {tot_loss/100:.4f}')
                 tot_loss = 0.0
 
-        print("\n")
+        train_accuracy = 100 * train_correct / train_total
+        print(
+            f'==> Epoch [{epoch+1}/{num_epochs}] is done, accuracy: {train_accuracy:.2f}%\n')
 
     print("Training complete")
 
