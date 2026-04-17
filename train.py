@@ -6,51 +6,82 @@ from model import MiniAlexNet
 from data_loader import test_loader, train_loader
 
 
-device = torch.device("mps")
-# Because I'm locally using Mac(M3 pro) to train this Model
-# If you happend to get a GPU to use, just change it to "cuda"
+def main():
 
-model = MiniAlexNet(num_classes=10).to(device)
+    device = torch.device("mps")
+    # Because I'm locally using Mac(M3 pro) to train this Model
+    # If you happend to get a GPU to use, just change it to "cuda"
 
-# Loss function
-criterion = nn.CrossEntropyLoss()
+    model = MiniAlexNet(num_classes=10).to(device)
 
-# emprically I choose 0.001 as Learning Rate
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+    # Loss function
+    criterion = nn.CrossEntropyLoss()
 
-num_epochs = 5
+    # emprically I choose 0.001 as Learning Rate
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-print("Start training...")
+    num_epochs = 5
 
-for epoch in range(num_epochs):
-    model.train()
-    tot_loss = 0
+    print("Start training...")
 
-    for i, (images, labels) in enumerate(train_loader):
+    for epoch in range(num_epochs):
+        model.train()
+        tot_loss = 0
 
-        images = images.to(device)
-        labels = labels.to(device)
+        for i, (images, labels) in enumerate(train_loader):
 
-        # last gradients to 0
-        optimizer.zero_grad()
+            images = images.to(device)
+            labels = labels.to(device)
 
-        # forward
-        outputs = model(images)
+            # last gradients to 0
+            optimizer.zero_grad()
 
-        cur_loss = criterion(outputs, labels)
-        cur_loss.backward()
+            # forward
+            outputs = model(images)
 
-        # perform optimization step with backpropagated gradients
-        optimizer.step()
+            cur_loss = criterion(outputs, labels)
+            cur_loss.backward()
 
-        # accumulate total loss
-        tot_loss += cur_loss.item()
+            # perform optimization step with backpropagated gradients
+            optimizer.step()
 
-        # print the average loss every 100 batches
-        if (i+1) % 100 == 0:
-            print(
-                f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{len(train_loader)}], Loss: {running_loss/100:.4f}')
-            running_loss = 0.0
+            # accumulate total loss
+            tot_loss += cur_loss.item()
+
+            # print the average loss every 100 batches
+            if (i+1) % 100 == 0:
+                print(
+                    f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{len(train_loader)}], Loss: {tot_loss/100:.4f}')
+                tot_loss = 0.0
+
+        print("\n")
+
+    print("Training complete")
+
+    print("\nTraining on the test_set")
+
+    model.eval()
+
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for images, labels in test_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+
+            outputs = model(images)
+
+            # the concrete value is not important, all we care about is which labels it predicted
+            _, predicted = torch.max(outputs.data, 1)
+
+            total += labels.size(0)
+
+            correct += (predicted == labels).sum().item()
+
+    accuracy = 100 * correct / total
+    print(f'Model\'s accuracy on 10000 images from test_set: {accuracy:.2f}%')
 
 
-print("Training complete")
+if __name__ == '__main__':
+    main()
