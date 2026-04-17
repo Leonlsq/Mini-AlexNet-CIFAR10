@@ -39,18 +39,16 @@ To preserve spatial information while maintaining depth, I adapted the architect
    ```bash
    git clone https://github.com/Leonlsq/Mini-AlexNet-CIFAR10.git
    cd MiniAlexNet
-
-   Install dependencies:
-
+   ```
 2.Install dependencies:
-Bash
-pip install torch torchvision matplotlib numpy
-Start training:
+   ```bash
+   pip install torch torchvision matplotlib numpy
+   ```
 
-3.
-Bash
-python train.py
-
+3.Start training:
+   ```bash
+   python train.py
+   ```
 
 
 ## About Me
