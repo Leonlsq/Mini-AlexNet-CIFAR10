@@ -17,24 +17,24 @@ To preserve spatial information while maintaining depth, I adapted the architect
 - **Pooling Strategy:** Used three $2 \times 2$ Max-Pooling layers to gradually reduce dimensions: $32 \rightarrow 16 \rightarrow 8 \rightarrow 4$.
 - **Classifier:** Downsized fully connected layers to $1024$ neurons to prevent overfitting on a smaller dataset and reduce computational overhead.
 
-## 🛠 Tech Stack
+##  Tech Stack
 - **Framework:** PyTorch
 - **Environment:** Python 3.x
 - **Libraries:** Torchvision (Data), Matplotlib (Visualization), NumPy
 
-## 📂 Project Structure
+## Project Structure
 - `model.py`: Definition of the `MiniAlexNet` class.
 - `data_loader.py`: Automated pipeline for CIFAR-10 download and preprocessing.
 - `train.py`: Training loop with real-time loss tracking and validation.
 - `.gitignore`: Configured to exclude heavy datasets and local caches.
 
-## 📈 Performance & Results
+## Performance & Results
 *(Optional: Insert your training loss curve or accuracy here after running the training)*
 
 - **Target Accuracy:** ~70% (on CIFAR-10 test set)
 - **Training Device:** MPS (Apple Silicon) / CUDA / CPU
 
-## ⚙️ How to Run
+## How to Run
 1. Clone the repo:
    ```bash
    git clone https://github.com/Leonlsq/Mini-AlexNet-CIFAR10.git
@@ -53,6 +53,6 @@ python train.py
 
 
 
-##About Me
+## About Me
 I am a 2nd-semester Informatics student at Technical University of Munich (TUM). 
 I am passionate about deep learning and actively self-teaching milestone architectures in Computer Vision and NLP.
